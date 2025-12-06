@@ -24,37 +24,39 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-// app.get("/api/timestamp/:date_string?", function (req, res) {
-//   let dateString = req.params.date_string;
+app.get("/api/:date?", function (req, res) {
+  let dateParam = req.params.date;
+  let date;
 
-//   let date;
-//   if (!dateString) {
-//     date = new Date();
-//   } else {
-//     // Check if dateString is a number (timestamp)
-//     if (!isNaN(dateString)) {
-//       date = new Date(parseInt(dateString));
-//     } else {
-//       date = new Date(dateString);
-//     }
-//   }
+  if(!dateParam){
+    date = new Date();
+  }
+  else if (!isNaN(dateParam)) {
+    date = new Date(parseInt(dateParam));
+  }
+  else {
+    date = new Date(dateParam);
+  }
 
-//   if (date.toString() === "Invalid Date") {
-//     res.json({ error: "Invalid Date" });
-//   } else {
-//     res.json({ 
-//       unix: date.getTime(),
-//       utc: date.toUTCString()
-//     });
-//   }
-// });
+  if (date.toString() === "Invalid Date") {
+    res.json({error: "Invalid Date"});
+  }
+
+  res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  })
+
+});
+
+
 
 app.get("/api/:unix", function (req, res) {
   let unix = req.params.unix;
   let num = parseInt(unix);
 
 
-  res.json({unix: unix, utc: new Date(num).toUTCString()});
+  res.json({unix: num, utc: new Date(num).toUTCString()});
 });
 
 
